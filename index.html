@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General - Microsoft Teams</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #1f1f1f;
+            --surface-color: #292929;
+            --surface-light: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-color: #5b5fc7;
+            --link-color: #8c8eff;
+            --tab-active: #a7a8ff;
+            --chat-bg: #141414;
+            --meeting-card: #a0a0ff;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.4;
+            font-size: 14px;
+        }
+
+        /* Contenedor para simular pantalla de móvil */
+        .mobile-app {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .top-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: var(--surface-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #444;
+        }
+
+        .back-icon {
+            font-size: 20px;
+            margin-right: 16px;
+            color: var(--text-primary);
+        }
+
+        .channel-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .channel-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #e6c270; /* Aproximación al logo de la universidad */
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f1f1f;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .channel-text h1 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .channel-text p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .header-actions i {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid #444;
+            position: sticky;
+            top: 56px;
+            z-index: 99;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            color: var(--tab-active);
+            border-bottom: 3px solid var(--tab-active);
+        }
+
+        /* Main Feed */
+        .feed {
+            padding: 12px;
+        }
+
+        /* Post Card */
+        .post-card {
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            border: 1px solid #3d3d3d;
+        }
+
+        .post-header {
+            display: flex;
+            padding: 12px 16px;
+            align-items: flex-start;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #444;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .avatar.ub-avatar {
+            background-color: #2b2d42;
+            color: #e6c270;
+            border: 1px solid #e6c270;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .status-icon {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: var(--surface-color);
+            border-radius: 50%;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .post-meta {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .post-actions {
+            color: var(--text-secondary);
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Post Content */
+        .post-content {
+            padding: 0 16px 12px;
+        }
+
+        .banner-img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* Simulated Banners */
+        .banner-simulated {
+            background: linear-gradient(to bottom, #0a1128, #1c294b);
+            width: 100%;
+            height: 140px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .banner-simulated h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            z-index: 2;
+        }
+
+        .megaphone {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #ff7b72;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .post-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            margin-top: 4px;
+        }
+
+        .text-box {
+            background-color: var(--surface-light);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #555;
+            font-size: 14px;
+        }
+
+        .text-box p {
+            margin-bottom: 8px;
+        }
+        
+        .text-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .text-box ul, .text-box ol {
+            margin-left: 20px;
+            margin-bottom: 8px;
+        }
+
+        .text-box li {
+            margin-bottom: 4px;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* File Attachment */
+        .file-attachment {
+            display: flex;
+            align-items: center;
+            background-color: var(--surface-light);
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            margin-bottom: 12px;
+        }
+
+        .file-icon {
+            background-color: #fff;
+            color: #d13438;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-right: 12px;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .file-size {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Reactions */
+        .reactions-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .reaction-pill {
+            background-color: var(--surface-light);
+            border: 1px solid #5b5fc7;
+            border-radius: 12px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+
+        .action-icons {
+            display: flex;
+            gap: 16px;
+            color: var(--text-secondary);
+            font-size: 16px;
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        .reply-row {
+            padding: 10px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Auditorio Box (Custom CSS) */
+        .auditorio-box {
+            background-color: #1c294b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #2a3b6b;
+            text-align: center;
+        }
+        .auditorio-box h2 {
+            color: #e6c270;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        .auditorio-box p {
+            font-size: 11px;
+            color: #ccc;
+            margin-bottom: 16px;
+        }
+        .grupos-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .grupo-card {
+            background-color: #1c294b;
+            border: 1px solid #2a3b6b;
+            border-radius: 6px;
+            padding: 8px 4px;
+            font-size: 10px;
+            color: #ccc;
+        }
+        .grupo-card.active {
+            border-color: #e6c270;
+        }
+        .grupo-card h4 {
+            color: #e6c270;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .grupo-card strong {
+            color: #fff;
+            display: block;
+            margin: 4px 0;
+        }
+        .grupo-card .date {
+            color: #fff;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .grupo-card .highlight {
+            color: #e6c270;
+            font-size: 9px;
+        }
+
+        /* Meeting Card */
+        .meeting-card {
+            background-color: var(--meeting-card);
+            color: #1f1f1f;
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .meeting-card i {
+            font-size: 20px;
+        }
+        .meeting-info h4 {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .meeting-info p {
+            font-size: 13px;
+        }
+        .thread-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background-color: var(--chat-bg);
+            padding-bottom: 60px;
+        }
+        
+        .chat-message {
+            display: flex;
+            padding: 8px 12px;
+            gap: 12px;
+        }
+        
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .chat-content {
+            flex: 1;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .chat-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .chat-text {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .chat-image-collage {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(45deg, #333, #111);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 12px;
+            border: 1px solid #444;
+        }
+
+        .quoted-message {
+            border-left: 3px solid #666;
+            padding-left: 8px;
+            margin-bottom: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Warning Box (Image 5) */
+        .warning-box {
+            border: 2px solid #e6c270;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            background-color: var(--surface-color);
+        }
+        .warning-box i {
+            color: #e6c270;
+            font-size: 24px;
+        }
+        .warning-box p {
+            font-size: 14px;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+        .warning-box strong {
+            color: #fff;
+        }
+
+        .footer-sparkle {
+            text-align: center;
+            font-style: italic;
+            color: #ccc;
+            font-size: 13px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .footer-sparkle::after {
+            content: '✦';
+            color: #e6c270;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Chat Input Bar */
+        .chat-input-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--surface-color);
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #444;
+            z-index: 100;
+        }
+
+        .plus-btn {
+            background-color: #5b5fc7;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .input-box {
+            flex: 1;
+            background-color: var(--surface-light);
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-icons {
+            display: flex;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background-color: #8b88e3;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 101;
+            cursor: pointer;
+        }
+        
+        /* Separador de secciones para visualizar las capturas */
+        .section-divider {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="mobile-app">
+    <!-- HEADER -->
+    <header class="top-header">
+        <i class="fas fa-arrow-left back-icon"></i>
+        <div class="channel-info">
+            <div class="channel-icon">UB</div>
+            <div class="channel-text">
+                <h1><i class="fas fa-info-circle" style="color: #5b5fc7; font-size: 12px;"></i> General</h1>
+                <p>CONSTRUYE TU VIDA ÉPICA - SEMINARIO DE GRADO 2026-3</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <i class="fas fa-ellipsis-v"></i>
+        </div>
+    </header>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active">Publicaciones</div>
+        <div class="tab">Archivos</div>
+        <div class="tab">Más</div>
+    </div>
+
+    <!-- FEED (Publicaciones) -->
+    <main class="feed">
+        
+        <!-- POST 1 -->
+        <article class="post-card">
+            <div class="post-header">
+                <div class="avatar ub-avatar">
+                    UB
+                    <i class="fas fa-times-circle status-icon"></i>
+                </div>
+                <div class="post-meta">
+                    <div class="author-name">Pablo Cuesta - Aula Virtual</div>
+                    <div class="post-time">30 de oct., 8:40 p. m.</div>
+                </div>
+                <div class="post-actions">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="banner-simulated">
+                    <div class="megaphone"><i class="fas fa-bullhorn"></i></div>
+                    <h3>Bienvenidos a Construye tu Vida Épica</h3>
+                </div>
+                
+                <h2 class="post-title">Liderazgo, productividad y resiliencia en la era de la IA</h2>
+                
+                <div class="text-box">
+                    <p>Hoy empieza algo que puede cambiar la forma en que ves tu futuro. Durante 7 semanas, el Dr. Luciano Castillo, profesor de Purdue University, te acompañará a construir tu propio <em>Road Map</em> de vida: tu propósito, tus metas y el liderazgo que necesitas para los desafíos de 2030.</p>
+                    <p>Te compartimos la presentación de bienvenida. Tómate unos minutos para revisarla: ahí está todo lo que vamos a vivir juntos.</p>
+                    <p><strong>Tu historia épica comienza este sábado. ¡Te esperamos!</strong></p>
+                </div>
+
+                <div class="file-attachment">
+                    <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+                    <div class="file-info">
+                        <div class="file-name">Construye tu Vida Épica - Presentación de bienvenida.pdf</div>
+                        <div class="file-size">1,79 MB</div>
+                    </div>
+                    <i class="fas fa-ellipsis-v" style="color: #b3b3b3;"></i>
+                </div>
+
+                <div class="action-icons">
+                    <i class="far fa-smile-plus"></i>
+                    <i class="fas fa-share"></i>
+                </div>
+                <div class="reply-row">
+                    <i class="far fa-comment"></i> Responder
+                </div>
+            </div>
+        </article>
+
+        <!-- POST 2 -->
+        <article class="post-card">
+            <div class="post-header">
+                <div class="avatar ub-avatar">
+                    UB
+                    <i class="fas fa-times-circle status-icon"></i>
+                </div>
+                <div class="post-meta">
+                    <div class="author-name">Pablo Cuesta - Aula Virtual</div>
+                    <div class="post-time">30 de oct., 9:17 p. m.</div>
+                </div>
+                <div class="post-actions">
+                    <i class="fas fa-pen" style="margin-right: 10px;"></i>
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="banner-simulated" style="background: linear-gradient(to bottom, #1a233a, #0d1321);">
+                    <div class="megaphone"><i class="fas fa-bullhorn"></i></div>
+                    <h3>Tu primera clase es este sábado</h3>
+                </div>
+                
+                <div class="text-box">
+                    <p>Nos vemos este sábado 31 de octubre, de 11:00 a. m. a 2:00 p. m. (hora Colombia), por Microsoft Teams.</p>
+                    <p><strong>Cómo vas a participar</strong></p>
+                    <ul>
+                        <li>Cada sábado la clase es en vivo por Teams. Entra aquí: <a href="#">Unirse a la clase</a>. También la encuentras en este canal.</li>
+                        <li>Por turnos, un grupo vivirá la clase en el auditorio de la sede <strong>Centro Histórico</strong> (Colsamiro). Consulta tu grupo y tu sábado con tu número de documento aquí: <a href="#">Consulta tu turno</a></li>
+                        <li>Si te toca auditorio, no necesitas conectarte desde el celular. Si lo haces, mantén micrófono y sonido apagados.</li>
+                        <li>Una vez al mes, el Dr. Luciano vendrá a dictar la clase en persona. Pronto te contamos cuándo y dónde.</li>
+                    </ul>
+                    <p><strong>Antes de la clase</strong></p>
+                    <ol>
+                        <li>Escucha los episodios 1, 2 y 3 del podcast del libro: <a href="#">Episodio 1</a> · <a href="#">Episodio 2</a> · <a href="#">Episodio 3</a> · <a href="#">Podcast completo</a></li>
+                        <li>Ten a mano una libreta: en ella construirás tu <em>Road Map</em> de vida.</li>
+                        <li>Entra a Teams con tu correo institucional (@unibarranquilla.edu.co).</li>
+                    </ol>
+                    <p>Este es tu momento. ¡Nos vemos el sábado!</p>
+                </div>
+
+                <!-- CUADRO DE AUDITORIO (Recreado con CSS) -->
+                <div class="auditorio-box">
+                    <h2>Tu turno en el auditorio</h2>
+                    <p>Sede Centro Histórico (Colsamiro) · Sábados de 11:00 a. m. a 2:00 p. m.</p>
+                    <p style="font-size: 12px; color: #fff; margin-bottom: 8px;">Consulta tu grupo con tu número de documento en el buscador del curso</p>
+                    
+                    <div class="grupos-grid">
+                        <div class="grupo-card active">
+                            <h4>Grupo 1</h4>
+                            <p>Estudiantes del listado</p>
+                            <strong>1 al 300</strong>
+                            <p>Tu sábado</p>
+                            <p class="date">31 de octubre</p>
+                            <p class="highlight">¡ESTE SÁBADO!</p>
+                        </div>
+                        <div class="grupo-card">
+                            <h4>Grupo 2</h4>
+                            <p>Estudiantes del listado</p>
+                            <strong>301 al 600</strong>
+                            <p>Tu sábado</p>
+                            <p class="date">7 de noviembre</p>
+                        </div>
+                        <div class="grupo-card">
+                            <h4>Grupo 3</h4>
+                            <p>Estudiantes del listado</p>
+                            <strong>601 al 900</strong>
+                            <p>Tu sábado</p>
+                            <p class="date">14 de noviembre</p>
+                        </div>
+                        <div class="grupo-card">
+                            <h4>Grupo 4</h4>
+                            <p>Estudiantes del listado</p>
+                            <strong>901 al 1.111</strong>
+                            <p>Tu sábado</p>
+                            <p class="date">28 de noviembre</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 11px; margin-top: 15px; color: #ccc;">Los demás sábados vives la clase en vivo por Teams, desde donde estés.</p>
+                    <p style="font-size: 10px; color: #e6c270; margin-top: 5px; text-transform: uppercase;">Construye tu vida épica en la era de la IA</p>
+                </div>
+
+                <div class="reactions-row">
+                    <div class="reaction-pill">
+                        <span>👍</span><span>🙌</span> <span>44</span>
+                    </div>
+                </div>
+
+                <div class="action-icons">
+                    <i class="far fa-smile-plus"></i>
+                    <i class="fas fa-share"></i>
+                </div>
+                <div class="reply-row">
+                    <i class="far fa-comment"></i> Responder
+                </div>
+            </div>
+        </article>
+
+        <!-- POST 3 (Reunión) -->
+        <article class="post-card">
+            <div class="post-header">
+                <div class="avatar ub-avatar">
+                    UB
+                    <i class="fas fa-times-circle status-icon"></i>
+                </div>
+                <div class="post-meta">
+                    <div class="author-name">Pablo Cuesta - Aula Virtual</div>
+                    <div class="post-time">30 de oct., 8:24 p. m.</div>
+                </div>
+                <div class="post-actions">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+            <div class="post-content">
+                <p style="margin-bottom: 12px;">Programaste una reunión</p>
+                
+                <div class="meeting-card">
+                    <i class="far fa-calendar-alt"></i>
+                    <div class="meeting-info">
+                        <h4>Construye tu Vida Épica – Clase en vivo <i class="fas fa-sync-alt" style="font-size: 12px; margin-left: 8px;"></i></h4>
+                        <p>11:00 a. m.–2:00 p. m.</p>
+                    </div>
+                </div>
+
+                <div class="reactions-row">
+                    <div class="reaction-pill">
+                        <span>👍</span> <span>6</span>
+                    </div>
+                </div>
+
+                <div class="action-icons">
+                    <i class="far fa-smile-plus"></i>
+                    <i class="fas fa-share"></i>
+                </div>
+                
+                <div class="thread-info">
+                    150 respuestas de Pablo Cuesta, Luciano, JAMES y 39 más
+                </div>
+                
+                <div style="padding: 12px 0; display: flex; gap: 8px; align-items: center; color: #b3b3b3; border-bottom: 1px solid #444;">
+                    <i class="fas fa-stop-circle"></i> La grabación se detuvo y no se guardó
+                </div>
+
+                <div class="reply-row">
+                    <i class="fas fa-reply"></i> Responder
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- SEPARADOR VISUAL PARA LA SIGUIENTE CAPTURA -->
+    <div class="section-divider">Vista de Chat (Captura 4)</div>
+
+    <!-- CHAT SECTION (Imagen 4) -->
+    <div class="chat-section">
+        
+        <div class="chat-message">
+            <div class="chat-avatar" style="background-color: #fff; color: #333; font-weight: bold;">GS</div>
+            <div class="chat-content">
+                <div class="chat-text">Carlos pasa canal de youtube</div>
+            </div>
+        </div>
+
+        <div class="chat-message">
+            <div class="chat-avatar" style="background-color: #2b579a;">JD</div>
+            <div class="chat-content">
+                <div class="chat-header">
+                    <span class="chat-name">JHANNYEL STIVEN GUERRA DIAZ</span>
+                    <span class="chat-time">31 de oct., 1:50 p. m.</span>
+                </div>
+                <div class="chat-text">
+                    <a href="#">CARLOS ALFREDO RAMÍREZ HOYOS</a> pasaloo
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-message">
+            <div class="chat-avatar ub-avatar" style="width: 32px; height: 32px;">UB</div>
+            <div class="chat-content">
+                <div class="chat-header">
+                    <span class="chat-name">Pablo Cuesta - Aula Virtual</span>
+                    <span class="chat-time">31 de oct., 1:52 p. m.</span>
+                </div>
+                <div class="chat-image-collage">
+                    [Imagen: Activity: What wins have you experienced in your life?]
+                </div>
+                <div class="chat-text">
+                    Actividad: ¿Qué victorias has vivido en tu vida?<br>
+                    • Escribe algunos ejemplos de victorias que hayas vivido.<br>
+                    • Revive ese momento: ¿cómo te sentiste?<br>
+                    • ¿Por qué esa experiencia es importante para ti?
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-message">
+            <div class="chat-avatar" style="background-color: #2b579a;">JD</div>
+            <div class="chat-content">
+                <div class="chat-header">
+                    <span class="chat-name">JHANNYEL STIVEN GUERRA DIAZ</span>
+                    <span class="chat-time">31 de oct., 1:52 p. m.</span>
+                </div>
+                <div class="chat-text">
+                    <a href="#">CARLOS ALFREDO RAMÍREZ HOYOS</a> me quiero suscribir quiero ser tu empleado
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-message">
+            <div class="chat-avatar ub-avatar" style="width: 32px; height: 32px;">UB</div>
+            <div class="chat-content">
+                <div class="chat-header">
+                    <span class="chat-name">Pablo Cuesta - Aula Virtual</span>
+                    <span class="chat-time">31 de oct., 1:54 p. m.</span>
+                </div>
+                <div class="chat-text">
+                    <a href="#">CARLOS ALFREDO RAMÍREZ HOYOS</a> Carlos, los compañeros quieren seguir tu canal de YouTube, puedes compartirlo por el chat...
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-message">
+            <div class="chat-avatar" style="background-color: #d13438;">CR</div>
+            <div class="chat-content">
+                <div class="chat-header">
+                    <span class="chat-name">CARLOS ALFREDO RAMÍREZ HOYOS</span>
+                    <span class="chat-time">31 de oct., 1:55 p. m.</span>
+                </div>
+                <div class="chat-text">
+                    pa los q me andan preguntando por el canal de youtube ese ya lo deje, pero ahorita estoy en tiktok como TURBO CARIBE subiendo videos de Formula 1 con un humor costeño: <a href="https://www.tiktok.com/@turbocaribe" target="_blank">https://www.tiktok.com/@turbocaribe</a>
+                </div>
+                <div class="reactions-row" style="margin-top: 8px;">
+                    <div class="reaction-pill" style="border-color: #444;">
+                        <span>❤️</span> <span>😮</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-message">
+            <div class="chat-avatar" style="background-color: #d13438;">CR</div>
+            <div class="chat-content">
+                <div class="chat-header">
+                    <span class="chat-name">CARLOS ALFREDO RAMÍREZ HOYOS</span>
+                    <span class="chat-time">31 de oct., 1:55 p. m.</span>
+                </div>
+                <div class="chat-text">
+                    si gustan me pueden apoyar ahí
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-message">
+            <div class="chat-avatar" style="background-color: #8a6d3b;">AS</div>
+            <div class="chat-content">
+                <div class="chat-header">
+                    <span class="chat-name">AMAURY SANTIAGO MONTES POLO</span>
+                    <span class="chat-time">31 de oct., 2:03 p. m.</span>
+                </div>
+                <div class="quoted-message">
+                    <strong>CARLOS A.</strong><br>
+                    ... ya los e andan preguntando por el canal de youtube ...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRA DE ENTRADA DE CHAT -->
+    <div class="chat-input-bar">
+        <div class="plus-btn"><i class="fas fa-plus"></i></div>
+        <div class="input-box">
+            Escribir un mensaje
+            <div class="input-icons">
+                <i class="far fa-smile"></i>
+                <i class="fas fa-camera"></i>
+                <i class="fas fa-microphone"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEPARADOR VISUAL PARA LA SIGUIENTE CAPTURA -->
+    <div class="section-divider">Nueva Publicación (Captura 5)</div>
+
+    <!-- POST 4 (Imagen 5) -->
+    <main class="feed" style="padding-bottom: 80px;">
+        <article class="post-card">
+            <div class="post-header">
+                <div class="avatar ub-avatar">
+                    UB
+                    <i class="fas fa-times-circle status-icon"></i>
+                </div>
+                <div class="post-meta">
+                    <div class="author-name">Pablo Cuesta - Aula Virtual</div>
+                    <div class="post-time">2 nov. 2026, 7:40 p. m.</div>
+                </div>
+                <div class="post-actions">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="banner-simulated" style="height: 100px;">
+                    <h3>Construye tu Vida Épica</h3>
+                </div>
+                
+                <h2 style="font-size: 18px; margin-bottom: 12px; font-weight: 700;">
+                    Tu clase de hoy es de <span style="color: #e6c270;">3:00 p. m. a 6:00 p. m.</span>
+                </h2>
+                
+                <p style="margin-bottom: 12px; font-size: 14px;">
+                    Nos encontramos hoy para continuar con nuestro proceso de formación en <strong>Construye tu Vida Épica</strong>.
+                </p>
+
+                <!-- Location Box -->
+                <div style="background-color: var(--surface-light); padding: 12px; border-radius: 8px; display: flex; gap: 12px; margin-bottom: 12px; align-items: center;">
+                    <i class="fas fa-map-marker-alt" style="font-size: 24px; color: #8c8eff;"></i>
+                    <div>
+                        <h4 style="color: #e6c270; font-size: 15px;">Lugar:</h4>
+                        <p style="font-weight: 600;">Centro Educativo Centro Histórico.</p>
+                    </div>
+                </div>
+
+                <!-- How to participate Box -->
+                <div style="background-color: var(--surface-light); padding: 12px; border-radius: 8px; display: flex; gap: 12px; margin-bottom: 16px;">
+                    <i class="far fa-calendar-alt" style="font-size: 24px; color: #8c8eff;"></i>
+                    <div>
+                        <h4 style="color: #e6c270; font-size: 15px; margin-bottom: 8px;">¿Cómo vas a participar?</h4>
+                        <ul style="margin-left: 16px; margin-bottom: 8px; font-size: 14px; line-height: 1.5;">
+                            <li style="margin-bottom: 8px;">La clase se desarrollará de manera <strong>presencial</strong> en el <strong>Centro Educativo Centro Histórico</strong>, en el horario indicado.</li>
+                            <li style="margin-bottom: 8px;">Se realizarán dos clases en el mes, de forma constante:</li>
+                        </ul>
+                        <div style="margin-left: 16px; font-size: 14px;">
+                            <div style="margin-bottom: 4px;"><i class="fas fa-check-circle" style="color: #8c8eff;"></i> Martes: <strong>3:00 p. m. a 6:00 p. m.</strong></div>
+                            <div><i class="fas fa-check-circle" style="color: #8c8eff;"></i> Sábados: (se avisará oportunamente la fecha y hora).</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Box -->
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Estaremos atentos a los <strong>mensajes compartidos</strong> por la institución y pendientes al <strong>correo</strong>, donde se informará la modalidad exacta de la clase del día sábado.</p>
+                </div>
+
+                <!-- Footer -->
+                <div class="footer-sparkle">
+                    ¡Seguimos construyendo juntos tu camino hacia un futuro épico!
+                </div>
+
+            </div>
+        </article>
+    </main>
+
+    <!-- FLOATING ACTION BUTTON -->
+    <div class="fab">
+        <i class="fas fa-pen"></i>
+    </div>
+
+</div>
+
+</body>
+</html>
